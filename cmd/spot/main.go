@@ -63,7 +63,7 @@ type options struct {
 
 // SecretsProvider defines secrets provider options, for all supported providers
 type SecretsProvider struct {
-	Provider string `long:"provider" env:"PROVIDER" description:"secret provider type" choice:"none" choice:"spot" choice:"vault" choice:"aws" default:"none"`
+	Provider string `long:"provider" env:"PROVIDER" description:"secret provider type" choice:"none" choice:"spot" choice:"vault" choice:"aws" choice:"ansible_vault" default:"none"`
 
 	Key  string `long:"key" env:"KEY" description:"secure key for spot secrets provider"`
 	Conn string `long:"conn" env:"CONN" description:"connection string for spot secrets provider" default:"spot.db"`
@@ -79,6 +79,11 @@ type SecretsProvider struct {
 		AccessKey string `long:"access-key" env:"ACCESS_KEY" description:"aws access key"`
 		SecretKey string `long:"secret-key" env:"SECRET_KEY" description:"aws secret key"`
 	} `group:"aws" namespace:"aws" env-namespace:"AWS"`
+
+	AnsibleVault struct {
+		VaultPath   string `long:"vault_path" env:"VAULT_PATH" description:"path to the ansible-vault file"`
+		VaultSecret string `long:"vault_secret" env:"VAULT_SECRET" description:"secret string for decrypting ansible_vault file" hidden:"true"`
+	} `group:"ansible_vault" namespace:"ansible" env-namespace:"ANSIBLE"`
 }
 
 var revision = "latest"
@@ -250,6 +255,9 @@ func makePlaybook(opts options, inventory string) (*config.PlayBook, error) {
 			return secrets.NewHashiVaultProvider(sopts.Vault.URL, sopts.Vault.Path, sopts.Vault.Token)
 		case "aws":
 			return secrets.NewAWSSecretsProvider(sopts.Aws.AccessKey, sopts.Aws.SecretKey, sopts.Aws.Region)
+		case "ansible_vault":
+			secret, _ := secrets.GetVaultSecret(sopts.AnsibleVault.VaultSecret)
+			return secrets.NewAnsibleVaultProvider(sopts.AnsibleVault.VaultPath, secret)
 		}
 		log.Printf("[WARN] unknown secrets provider %q", sopts.Provider)
 		return &secrets.NoOpProvider{}, nil
