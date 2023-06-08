@@ -53,7 +53,7 @@ func (p *AnsibleVaultProvider) Get(key string) (string, error) {
 
 func GetVaultSecret(secret string) (string, error) {
 	if secret == "" {
-		fmt.Print("Enter ansible_vault password: ")
+		fmt.Print("Enter ansible-vault password: ")
 		vault_secret, err := term.ReadPassword(int(syscall.Stdin))
 		if err != nil {
 			return "", fmt.Errorf("error read password")

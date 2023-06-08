@@ -8,7 +8,7 @@ import (
 )
 
 func TestAnsibleVaultProvider_Get(t *testing.T) {
-	vault_path := "testdata/test_ansible_vault"
+	vault_path := "testdata/test_ansible-vault"
 	vault_secret := "password"
 	p, err := NewAnsibleVaultProvider(vault_path, vault_secret)
 	require.NoError(t, err, "failed to create AnsibleVaultProvider")
