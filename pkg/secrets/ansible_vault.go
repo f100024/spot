@@ -14,15 +14,16 @@ type AnsibleVaultProvider struct {
 	data map[string]interface{}
 }
 
-// NewAnsibleVaultProvider creates ad new instance of AnsibleVaultProvider
+// NewAnsibleVaultProvider creates a new instance of AnsibleVaultProvider
 func NewAnsibleVaultProvider(vault_path, secret string) (*AnsibleVaultProvider, error) {
-	info, err := os.Stat(vault_path)
+	fi, err := os.Lstat(vault_path)
 	if err != nil {
-		return nil, fmt.Errorf("error get stat of ansible-vault file: %s", vault_path)
+		return nil, fmt.Errorf("error get fileinfo of: %s", vault_path)
 	}
-	if info.IsDir() {
-		return nil, fmt.Errorf("ansible-vault file is directory: %s", vault_path)
+	if !fi.Mode().IsRegular() {
+		return nil, fmt.Errorf("%s is not a regular file", vault_path)
 	}
+
 	// Decrypt ansible-vault
 	decryptedVault, err := vault.DecryptFile(vault_path, secret)
 	if err != nil {
