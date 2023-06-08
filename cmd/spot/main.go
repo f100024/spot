@@ -256,8 +256,7 @@ func makePlaybook(opts options, inventory string) (*config.PlayBook, error) {
 		case "aws":
 			return secrets.NewAWSSecretsProvider(sopts.Aws.AccessKey, sopts.Aws.SecretKey, sopts.Aws.Region)
 		case "ansible-vault":
-			secret, _ := secrets.GetVaultSecret(sopts.AnsibleVault.VaultSecret)
-			return secrets.NewAnsibleVaultProvider(sopts.AnsibleVault.VaultPath, secret)
+			return secrets.NewAnsibleVaultProvider(sopts.AnsibleVault.VaultPath, sopts.AnsibleVault.VaultSecret)
 		}
 		log.Printf("[WARN] unknown secrets provider %q", sopts.Provider)
 		return &secrets.NoOpProvider{}, nil

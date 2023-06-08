@@ -4,10 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"syscall"
 
 	vault "github.com/sosedoff/ansible-vault-go"
-	term "golang.org/x/term"
 	yaml "gopkg.in/yaml.v3"
 )
 
@@ -49,16 +47,4 @@ func (p *AnsibleVaultProvider) Get(key string) (string, error) {
 		return fmt.Sprintf("%v", key_value), nil
 	}
 	return "", fmt.Errorf("not found key: %v", key)
-}
-
-func GetVaultSecret(secret string) (string, error) {
-	if secret == "" {
-		fmt.Print("Enter ansible-vault password: ")
-		vault_secret, err := term.ReadPassword(int(syscall.Stdin))
-		if err != nil {
-			return "", fmt.Errorf("error read password")
-		}
-		return string(vault_secret), nil
-	}
-	return secret, nil
 }

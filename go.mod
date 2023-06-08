@@ -18,11 +18,10 @@ require (
 	github.com/lib/pq v1.10.9
 	github.com/pelletier/go-toml/v2 v2.0.8
 	github.com/pkg/sftp v1.13.5
+	github.com/sosedoff/ansible-vault-go v0.2.0
 	github.com/stretchr/testify v1.8.3
 	github.com/testcontainers/testcontainers-go v0.19.0
-	github.com/sosedoff/ansible-vault-go v0.2.0
 	golang.org/x/crypto v0.9.0
-	golang.org/x/term v0.8.0
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v1.22.1
 )
