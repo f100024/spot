@@ -11,7 +11,7 @@ import (
 
 // AnsibleVaultProvider is a provider for ansible-vault files
 type AnsibleVaultProvider struct {
-	data map[interface{}]interface{}
+	data map[string]interface{}
 }
 
 // NewAnsibleVaultProvider creates ad new instance of AnsibleVaultProvider
@@ -31,7 +31,7 @@ func NewAnsibleVaultProvider(vault_path, secret string) (*AnsibleVaultProvider, 
 	log.Printf("[INFO] ansible vault file decrypted")
 
 	// Unmarshal decrypted data
-	m := make(map[interface{}]interface{})
+	m := make(map[string]interface{})
 	err = yaml.Unmarshal([]byte(decryptedVault), &m)
 	if err != nil {
 		return nil, fmt.Errorf("error during unmarshaling yaml file")
